@@ -20,7 +20,7 @@ const TITLE = 'Hermetry assistant';
 const GREETING = 'Hi! I can answer questions about Hermetry: plans, devices, set-up. What would you like to know?';
 const CONSENT = (
   <>
-    Your messages are processed by an AI provider to answer you. Do not share personal data. See our{' '}
+    Your messages are processed by an AI provider to answer you. See our{' '}
     <a href="#privacy" className="text-primary underline">privacy policy</a>.
   </>
 );
