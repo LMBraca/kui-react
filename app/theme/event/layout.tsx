@@ -411,9 +411,9 @@ export default function EventThemeLayout({ children }: { children: React.ReactNo
             {/* link columns */}
             {FOOTER_COLS.map((col) => (
               <div key={col.heading} className="space-y-3">
-                <h3 className="text-[11px] font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                <h2 className="text-[11px] font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.3)' }}>
                   {col.heading}
-                </h3>
+                </h2>
                 <ul className="space-y-2">
                   {col.links.map((link) => (
                     <li key={link.label}>

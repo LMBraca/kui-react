@@ -24,6 +24,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { TOPICS, POSTS, FORUM_CATEGORIES } from '../../forum.data';
 
+// Small grey text on the accepted solution's green falls under 4.5:1 with text-secondary: a step darker there.
+const SOLUTION_MUTED = 'text-[color-mix(in_srgb,var(--text-secondary)_55%,var(--text-primary))]';
+
 export async function generateStaticParams() {
   return TOPICS.map((t) => ({ slug: t.slug }));
 }
@@ -172,13 +175,13 @@ export default async function TopicDetailPage({ params }: { params: Promise<{ sl
                       >
                         {post.authorName}
                       </Link>
-                      <span className="text-xs text-text-disabled block">{rank}</span>
+                      <span className={cn('text-xs text-text-secondary block', isSolution && SOLUTION_MUTED)}>{rank}</span>
                       {post.staff && (
                         <StaffBadge org={post.staff.org} colour={post.staff.colour} className="mt-1" />
                       )}
 
                       {/* Rank stars */}
-                      <div className="flex justify-center gap-0.5 mt-1" aria-label={`${stars} of 5 stars`}>
+                      <div className="flex justify-center gap-0.5 mt-1" role="img" aria-label={`${stars} of 5 stars`}>
                         {Array.from({ length: 5 }).map((_, si) => (
                           <span
                             key={si}
@@ -191,9 +194,9 @@ export default async function TopicDetailPage({ params }: { params: Promise<{ sl
                       </div>
                     </div>
 
-                    <div className="text-xs text-text-disabled space-y-0.5 w-full">
-                      <div>Posts: <span className="text-text-secondary">{post.authorPostCount.toLocaleString()}</span></div>
-                      <div>Joined: <span className="text-text-secondary">{formatJoinDate(post.createdAt)}</span></div>
+                    <div className={cn('text-xs text-text-secondary space-y-0.5 w-full', isSolution && SOLUTION_MUTED)}>
+                      <div>Posts: {post.authorPostCount.toLocaleString()}</div>
+                      <div>Joined: {formatJoinDate(post.createdAt)}</div>
                     </div>
 
                     {index === 0 && (
@@ -212,12 +215,12 @@ export default async function TopicDetailPage({ params }: { params: Promise<{ sl
                         isSolution && acceptedSolutionClasses.meta,
                       )}
                     >
-                      <span className={cn('text-text-disabled', isSolution && 'text-current')}>
+                      <span className={cn('text-text-secondary', isSolution && 'text-current')}>
                         Posted: <span className={cn('text-text-secondary font-medium', isSolution && 'text-current')}>{formatPostDate(post.createdAt)}</span>
                       </span>
                       <span className="flex items-center gap-2">
                         {isSolution && <AcceptedSolutionBadge />}
-                        <span className={cn('text-text-disabled', isSolution && 'text-current')}>#{index + 1}</span>
+                        <span className={cn('text-text-secondary', isSolution && 'text-current')}>#{index + 1}</span>
                       </span>
                     </div>
 
@@ -334,11 +337,11 @@ export default async function TopicDetailPage({ params }: { params: Promise<{ sl
                   >
                     {t.title}
                   </Link>
-                  <span className="text-text-disabled ml-2">
+                  <span className="text-text-secondary ml-2">
                     by <Link href="/theme/forum" className="text-primary hover:underline">{t.authorName}</Link>
                   </span>
                 </div>
-                <div className="flex items-center gap-3 text-text-disabled ml-4 shrink-0">
+                <div className="flex items-center gap-3 text-text-secondary ml-4 shrink-0">
                   <TopicStatusBadge status={t.status} size="sm" />
                   {t.solutionPostId && <TopicSolvedBadge size="sm" />}
                   <span className="hidden sm:inline">{t.replyCount} replies</span>
