@@ -29,8 +29,9 @@ export type ModalProps = {
   /** Accessible name of the close button. Default = "Close dialog". */
   closeLabel?: string;
   /**
-   * Close when the Next.js pathname changes while open (useRouteClose), e.g.
-   * after a link inside the overlay navigates client-side.
+   * Close when the pathname changes while open (useRouteClose), e.g.
+   * after a link inside the overlay navigates client-side. Needs a RouteProvider
+   * at the app root (NextRouteAdapter in Next.js apps); without one it never closes.
    */
   closeOnRouteChange?: boolean;
   /** TODO M5: respect prefers-reduced-motion when true. */

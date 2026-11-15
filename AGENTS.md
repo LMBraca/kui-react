@@ -547,6 +547,12 @@ Always use `cn()` when building className strings. Never concatenate strings dir
 9. **`disabled:opacity-50 disabled:cursor-not-allowed`** — standard disabled styling.
 10. **Spread `...rest`** — pass remaining HTML attributes to the root element.
 11. **No business logic in `ui/`** — data fetching, routing, and external calls belong in `app/` or `domain/`.
+12. **No Next imports in package entries** — `./ui`, `./app` and `./chart` must not reach `next` or `next/*`
+    (`npm run check:next-free`, blocking in CI). Read the pathname and the client-side link through
+    `libs/hooks/routeContext.tsx` (`useRoutePathname`, and `RouteAnchor` for links: rendering `useRouteLink()`
+    as JSX trips the React Compiler lint). Next-only code goes in
+    `libs/adapters/next.tsx`, the `./next` entry, whose `NextRouteAdapter` the showcase mounts in `app/layout.tsx`.
+    Lazy loading uses `clientOnly` in `modules/ui/lazy.tsx`, not `next/dynamic`.
 
 ---
 

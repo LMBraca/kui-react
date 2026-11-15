@@ -73,7 +73,7 @@ function DrawerRouteAwareDemo() {
         <div className="space-y-3 text-sm text-text-secondary">
           <p>
             With <code className="font-mono text-xs">closeOnRouteChange</code> the drawer closes when
-            the Next.js pathname changes while it is open, e.g. after a link inside it navigates
+            the pathname from the RouteProvider at the app root changes while it is open, e.g. after a link inside it navigates
             client-side. The AppShell mobile sidebar drawer opts in.
           </p>
           <p>Body scroll is locked while this drawer is open (try scrolling the page behind it).</p>
@@ -281,7 +281,7 @@ export function Modal({ open, onClose, title, description, children, footer, siz
       title: 'Drawer',
       category: 'Organism',
       abbr: 'Dr',
-      description: 'Side panel sliding in from the screen edge. Left / right placement with focus management and Escape close. Body scroll is locked while open via the shared Overlays useScrollLock hook (iOS rubber-band safe). closeOnRouteChange closes it when the Next.js pathname changes while open, as the AppShell mobile sidebar does.',
+      description: 'Side panel sliding in from the screen edge. Left / right placement with focus management and Escape close. Body scroll is locked while open via the shared Overlays useScrollLock hook (iOS rubber-band safe). closeOnRouteChange closes it when the pathname changes while open (RouteProvider at the app root; NextRouteAdapter in Next.js), as the AppShell mobile sidebar does.',
       filePath: 'modules/ui/Overlays/Drawer/index.tsx',
       sourceCode: `'use client';
 import { cn } from '@/libs/utils/cn';
@@ -317,7 +317,7 @@ export function Drawer({ open, onClose, title, side = 'right', children, footer,
         {
           title: 'Route-aware close',
           preview: <DrawerRouteAwareDemo />,
-          code: `// closeOnRouteChange: closes when the Next.js pathname changes while open.\n<Drawer\n  open={open}\n  onClose={() => setOpen(false)}\n  title="Route-aware drawer"\n  side="right"\n  closeOnRouteChange\n>\n  ...\n</Drawer>`,
+          code: `// closeOnRouteChange: closes when the pathname changes while open.\n// Needs RouteProvider at the app root (NextRouteAdapter from the ./next entry in Next.js).\n<Drawer\n  open={open}\n  onClose={() => setOpen(false)}\n  title="Route-aware drawer"\n  side="right"\n  closeOnRouteChange\n>\n  ...\n</Drawer>`,
         },
       ],
     },

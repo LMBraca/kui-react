@@ -1,5 +1,8 @@
 'use client';
-import Link from 'next/link';
+// The home link navigates client-side through the app's RouteProvider (next/link under
+// NextRouteAdapter) and is a plain anchor otherwise. Not a renderLink prop, because
+// Server Components render this page and cannot pass a function.
+import { RouteAnchor } from '@/libs/hooks/routeContext';
 import { cn } from '@/libs/utils/cn';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
@@ -61,7 +64,7 @@ export function NotFoundPage({
 
       {/* actions */}
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <Link
+        <RouteAnchor
           href={homeHref}
           className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-primary-fg transition-transform hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
           style={{
@@ -71,7 +74,7 @@ export function NotFoundPage({
         >
           <FontAwesomeIcon icon={faArrowLeft} className="w-3.5 h-3.5" aria-hidden="true" />
           {homeLabel}
-        </Link>
+        </RouteAnchor>
 
         <button
           onClick={() => history.back()}

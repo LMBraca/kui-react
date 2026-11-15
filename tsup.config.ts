@@ -7,6 +7,10 @@ export default defineConfig({
     ui: 'modules/ui/index.ts',
     app: 'modules/app/index.ts',
     common: 'modules/domains/common/index.ts',
+    // The only entry that imports Next (P0-09). ./ui, ./app and ./chart stay Next-free (check:next-free).
+    next: 'libs/adapters/next.tsx',
+    // Chart names such as Grid, Legend and Brush are generic, so they get a subpath of their own.
+    chart: 'modules/ui/Chart/index.ts',
   },
   format: ['esm', 'cjs'],
   dts: {

@@ -10,6 +10,7 @@ import {
 import { ConditionalShell } from "@/modules/app/ConditionalShell";
 import { ConfirmHost } from "@/modules/ui/ConfirmDialog";
 import { GoogleAnalytics } from "@/modules/app/GoogleAnalytics";
+import { NextRouteAdapter } from "@/libs/adapters/next";
 
 /* =========================================================
    FONTS
@@ -209,8 +210,10 @@ export default function RootLayout({
 
         {/* APP SHELL (OPTIONAL) */}
         <main className="flex-1">
-          <ConditionalShell>{children}</ConditionalShell>
-          <ConfirmHost />
+          <NextRouteAdapter>
+            <ConditionalShell>{children}</ConditionalShell>
+            <ConfirmHost />
+          </NextRouteAdapter>
         </main>
 
         {/* STRUCTURED DATA */}

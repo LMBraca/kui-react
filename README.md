@@ -98,12 +98,19 @@ import { cn } from '@/libs/utils/cn';
 
 ## Styling setup
 
-The package stylesheet carries the design tokens and Font Awesome's icon CSS. Import it after Tailwind:
+The package stylesheet carries the design tokens, the Tailwind colour mapping (`@theme inline`, so `bg-primary`,
+`text-text-secondary` and the rest work), an `@source` for the built components, the `.sidebar-scrollbar-none`
+helper, the base rules for `color-scheme` and checkbox `accent-color`, and Font Awesome's icon CSS. Import it after
+Tailwind:
 
 ```css
 @import "tailwindcss";
 @import "@kuraykaraaslan/kui-react/styles";
 ```
+
+Tailwind does not scan `node_modules`. The stylesheet's `@source "../dist";` points Tailwind at the package's built
+components, so their classes are generated without any setup in your app. Fonts are yours to set: the showcase's
+`--font-sans` and `--font-mono` come from `next/font` and are not in the package stylesheet.
 
 Font Awesome's CSS sits in Tailwind's `base` layer, so a size class on an icon (`w-4 h-4`, `size-5`) beats Font
 Awesome's default `1em` box. Font Awesome also injects the same CSS at runtime, without a layer, and that copy beats
@@ -113,6 +120,51 @@ every Tailwind utility. Turn it off once, in client code that runs before the fi
 ```ts
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
+```
+
+## Using kui-react outside Next
+
+Next.js is an optional peer. The `./ui`, `./app` and `./chart` entries import no Next module (`npm run
+check:next-free` enforces this in CI), so they work in a plain React app such as Vite or Tauri. Only the `./next`
+entry imports Next.
+
+Two components care about navigation: overlays with `closeOnRouteChange` (the `AppShell` mobile sidebar drawer
+among them) and `NotFoundPage`'s home link. They read the current pathname and a client-side link component from a
+`RouteProvider`. Mount one at the root and feed it from your router:
+
+```tsx
+import { RouteProvider } from '@kuraykaraaslan/kui-react/ui';
+
+// e.g. React Router
+function Root() {
+  const { pathname } = useLocation();
+  return (
+    <RouteProvider pathname={pathname} Link={MyRouterLink}>
+      <App />
+    </RouteProvider>
+  );
+}
+```
+
+`Link` receives anchor props plus a string `href`. Without a provider, overlays never close on navigation (development
+builds warn once when one asks to) and `NotFoundPage` renders a plain anchor. In your own components, `RouteAnchor`
+(also from `./ui`) is an anchor that navigates through the provider's `Link` when there is one.
+
+In a Next.js App Router app, mount the adapter instead, which feeds the provider from `usePathname` and `next/link`:
+
+```tsx
+import { NextRouteAdapter } from '@kuraykaraaslan/kui-react/next';
+
+<NextRouteAdapter>{children}</NextRouteAdapter>
+```
+
+The `Lazy*` wrappers (`LazyDataTable`, `LazyMapView` and the rest) use `React.lazy` and load on the client only, under
+any framework: server rendering and hydration show the skeleton fallback and never load the component.
+
+Chart components are on their own entry, because names such as `Grid`, `Legend` and `Brush` are generic:
+
+```ts
+import { LineChart, Legend } from '@kuraykaraaslan/kui-react/chart';
 ```
 
 ## AI agent quick reference

@@ -138,8 +138,23 @@ export type { QualityOption, SubtitleTrack, AudioTrackOption } from './VideoPlay
 export { ViewToggle } from './ViewToggle';
 export type { ViewOrientation } from './ViewToggle';
 
-// Lazy wrappers (next/dynamic, ssr:false) for heavy components
+// Lazy wrappers for heavy components: React.lazy, loaded on the client only (no Next needed)
 export { LazyDataTable, LazyAdvancedDataTable, LazyServerDataTable, LazyDateRangePicker, LazyMapView, LazyVideoPlayer } from './lazy';
+
+// Router-agnostic route information (pathname, client-side Link) for useRouteClose and NotFoundPage.
+// Next.js apps mount NextRouteAdapter from the ./next entry instead.
+export { RouteProvider, RouteAnchor } from '@/libs/hooks/routeContext';
+export type { RouteProviderProps, RouteValue, RouteLink, RouteAnchorProps } from '@/libs/hooks/routeContext';
+
+// Confirmation dialog: the component, the host and the promise API
+export { ConfirmDialog, ConfirmHost, confirmDialog, useConfirm } from './ConfirmDialog';
+export type { ConfirmDialogProps, ConfirmOptions, ConfirmResult, ConfirmChoice, ConfirmInput, ConfirmTone } from './ConfirmDialog';
+export { ColorPicker, DEFAULT_COLOR_SWATCHES } from './ColorPicker';
+export type { ColorPickerProps, ColorFormat, ColorValue } from './ColorPicker';
+
+// Optimistic control state for writes that are confirmed by a later read
+export { useAsyncControl } from '@/libs/hooks/useAsyncControl';
+export type { AsyncControlState, UseAsyncControlOptions, UseAsyncControlResult } from '@/libs/hooks/useAsyncControl';
 
 // Zustand toast store — programmatic API
 export { useToastStore, toast, getEffectiveDuration } from './Toast.store';

@@ -7,6 +7,10 @@
 @layer properties, theme, base, components, utilities;
 @import "@fortawesome/fontawesome-svg-core/styles.css" layer(base);
 
+/* Tailwind does not scan node_modules. This path is relative to this file, so a consumer that imports it
+   gets the classes used in the built components (dist/) generated too. */
+@source "../dist";
+
 :root {
   --primary:         #3b82f6;
   --primary-hover:   #2563eb;
@@ -142,4 +146,83 @@
 .sidebar-scrollbar-hover:focus-visible::-webkit-scrollbar-thumb:hover,
 .sidebar-scrollbar-hover:focus-within::-webkit-scrollbar-thumb:hover {
   background: var(--text-disabled);
+}
+
+/* Maps the tokens above to Tailwind colours (bg-primary, text-text-secondary, ...). Copied from the colour
+   part of app/globals.css; keep the two in step. The --font-* entries stay in app/globals.css, because they
+   point at next/font variables that only the showcase defines. */
+@theme inline {
+  --color-primary:         var(--primary);
+  --color-primary-hover:   var(--primary-hover);
+  --color-primary-active:  var(--primary-active);
+  --color-primary-subtle:  var(--primary-subtle);
+  --color-primary-fg:      var(--primary-fg);
+
+  --color-secondary:        var(--secondary);
+  --color-secondary-hover:  var(--secondary-hover);
+  --color-secondary-fg:     var(--secondary-fg);
+  --color-secondary-active: var(--secondary-active);
+  --color-secondary-subtle: var(--secondary-subtle);
+
+  --color-accent:           var(--accent);
+  --color-accent-hover:     var(--accent-hover);
+  --color-accent-fg:        var(--accent-fg);
+
+  --color-surface-base:    var(--surface-base);
+  --color-surface-raised:  var(--surface-raised);
+  --color-surface-overlay: var(--surface-overlay);
+  --color-surface-sunken:  var(--surface-sunken);
+
+  --color-text-primary:    var(--text-primary);
+  --color-text-secondary:  var(--text-secondary);
+  --color-text-disabled:   var(--text-disabled);
+  --color-text-inverse:    var(--text-inverse);
+
+  --color-border:          var(--border);
+  --color-border-strong:   var(--border-strong);
+  --color-border-focus:    var(--border-focus);
+
+  --color-success:         var(--success);
+  --color-success-subtle:  var(--success-subtle);
+  --color-success-fg:      var(--success-fg);
+
+  --color-warning:         var(--warning);
+  --color-warning-subtle:  var(--warning-subtle);
+  --color-warning-fg:      var(--warning-fg);
+
+  --color-error:           var(--error);
+  --color-error-subtle:    var(--error-subtle);
+  --color-error-fg:        var(--error-fg);
+
+  --color-info:            var(--info);
+  --color-info-subtle:     var(--info-subtle);
+  --color-info-fg:         var(--info-fg);
+}
+
+/* Icon-only sidebar: no scrollbar at all (it still scrolls by wheel, touch and keyboard). A classic scrollbar (Windows)
+   takes its width out of the narrow nav even with no gutter reserved, and the centered icons slid left. */
+.sidebar-scrollbar-none {
+  scrollbar-width: none;
+}
+
+.sidebar-scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Native checkboxes and radios: their border and fill cannot take `border-*` /
+   `text-*` classes, so they follow the theme through accent-color and
+   color-scheme, and an invalid one gets an error outline. */
+@layer base {
+  :root { color-scheme: light; }
+  .dark { color-scheme: dark; }
+  input[type="checkbox"],
+  input[type="radio"] {
+    accent-color: var(--primary);
+  }
+  input[type="checkbox"][aria-invalid="true"],
+  input[type="radio"][aria-invalid="true"] {
+    accent-color: var(--error);
+    outline: 1px solid var(--error);
+    outline-offset: 1px;
+  }
 }

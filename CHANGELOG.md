@@ -6,6 +6,19 @@ All notable changes to this project will be documented here. Format follows [Kee
 
 ### Added
 
+- Next.js is an optional peer: `./ui`, `./app` and the new `./chart` entry import no Next module, so the package works
+  in a plain React app (Vite, Tauri). `RouteProvider` (exported from `./ui`) gives overlays and `NotFoundPage` the
+  current pathname and a client-side `Link` from any router; the new `./next` entry's `NextRouteAdapter` feeds it from
+  `usePathname` and `next/link`, and the showcase root layout mounts it. Next.js apps that use `closeOnRouteChange`
+  must mount `NextRouteAdapter` (development builds warn once when an overlay asks to close on navigation without a
+  provider). `npm run check:next-free` (esbuild metafile) blocks a Next import reaching those entries in CI.
+- Exports from `./ui`: `ConfirmDialog`, `ConfirmHost`, `confirmDialog`, `useConfirm`, `ColorPicker`,
+  `DEFAULT_COLOR_SWATCHES`, `useAsyncControl`, `RouteProvider`, `RouteAnchor` and their types. Chart components get the `./chart`
+  subpath, because names such as `Grid`, `Legend` and `Brush` are generic.
+- `styles/index.css` carries the Tailwind colour mapping (`@theme inline`), `@source "../dist"`,
+  `.sidebar-scrollbar-none` and the base rules for `color-scheme` and checkbox `accent-color`, so `bg-primary` and the
+  rest work for package consumers. `--font-*` stays in `app/globals.css`.
+
 - `AssistantLauncher` asks for details as chat messages (owner 2026-11-13, from the kui-ai-chatbot WordPress plugin): the new
   `AssistantQuickReplies` (answer chips under the newest question: Skip, Confirm, Send, Cancel; `primary` draws one filled) and
   `AssistantQuote` (text read back for the visitor to confirm), and `inputProps` for a step's `autoComplete` / `inputMode` / `placeholder`.
@@ -77,6 +90,12 @@ All notable changes to this project will be documented here. Format follows [Kee
   baselines, a job) on `settings/demo-settings.ts`.
 
 ### Changed
+
+- `Lazy*` wrappers use `React.lazy` with a client-only guard instead of `next/dynamic`: same fallback on the server and
+  during hydration, and the loader is still never called on the server.
+- `useRouteClose` reads the pathname from `RouteProvider`; the pathname is now read once at the root instead of in each
+  overlay. Behaviour under Next is the same with `NextRouteAdapter` mounted.
+- `react-hook-form` moves from `devDependencies` to `dependencies` (same range): `FormField` imports it at runtime.
 
 - `SceneSetupDrawer` (next-boilerplate phase 47, views by name): the slot leaves the drawer. The `slots`, `allowNewSlot`, `slotLocked` and
   `onSlotChange` props, the slot select, "New slot…" and the "Switch slot" confirmation are gone (Advanced included); section 1 is the type
